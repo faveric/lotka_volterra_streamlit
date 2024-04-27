@@ -18,6 +18,9 @@ def simulate_lotka_volterra(alpha, beta, gamma, delta, x0, y0, duration):
         'y0': y0
     }
 
+    # Compile the FMU
+    fmpy.util.compile_platform_binary(fmu)
+    
     # Simulate the FMU
     result = simulate_fmu(fmu, start_time=0, stop_time=duration, start_values=parameters)
 
