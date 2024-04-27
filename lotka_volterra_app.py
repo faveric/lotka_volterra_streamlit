@@ -33,6 +33,7 @@ def simulate_lotka_volterra(alpha, beta, gamma, delta, x0, y0, duration, call_co
     time = result['time']
     x = result['x']
     y = result['y']
+    updated_call_count = call_count + 1
 
     return time, x, y, updated_call_count
 
