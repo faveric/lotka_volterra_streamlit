@@ -4,8 +4,11 @@ import matplotlib.pyplot as plt
 from fmpy import simulate_fmu
 from fmpy.util import compile_platform_binary
 
+# Initialize Function Call Counts
+call_count = 0 
+
 # Function to simulate the Lotka-Volterra model FMU
-def simulate_lotka_volterra(alpha, beta, gamma, delta, x0, y0, duration):
+def simulate_lotka_volterra(alpha, beta, gamma, delta, x0, y0, duration, call_count):
     # Load the FMU
     fmu = 'Lotka_Volterra.fmu'
 
@@ -20,7 +23,8 @@ def simulate_lotka_volterra(alpha, beta, gamma, delta, x0, y0, duration):
     }
 
     # Compile the FMU
-    compile_platform_binary(fmu)
+    if call_count == 0:
+        compile_platform_binary(fmu)
     
     # Simulate the FMU
     result = simulate_fmu(fmu, start_time=0, stop_time=duration, start_values=parameters)
@@ -30,7 +34,7 @@ def simulate_lotka_volterra(alpha, beta, gamma, delta, x0, y0, duration):
     x = result['x']
     y = result['y']
 
-    return time, x, y
+    return time, x, y, updated_call_count
 
 # Streamlit app
 st.title('Lotka-Volterra Model Simulation')
@@ -69,7 +73,7 @@ duration = st.sidebar.number_input('Simulation duration', value=100, step=1)
 
 # Start Simulation button
 if st.sidebar.button('Start Simulation'):
-    time, x, y = simulate_lotka_volterra(alpha, beta, gamma, delta, x0, y0, duration)
+    time, x, y, call_count = simulate_lotka_volterra(alpha, beta, gamma, delta, x0, y0, duration, call_count)
 
     # Plot results
     fig, ax = plt.subplots(figsize=(10, 6))
